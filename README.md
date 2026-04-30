@@ -176,13 +176,3 @@ Support Vector Machine is effective for binary classification tasks like Cats vs
 - Fast prediction after training
 
 ---
-
-## Future Improvements
-
-- Use CNN / Deep Learning models for higher accuracy
-- Apply Data Augmentation
-- Tune hyperparameters using GridSearchCV
-- Deploy as Web App using Flask / Streamlit
-- Add real-time image upload prediction
-
---

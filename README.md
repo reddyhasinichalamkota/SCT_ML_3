@@ -185,15 +185,4 @@ Support Vector Machine is effective for binary classification tasks like Cats vs
 - Deploy as Web App using Flask / Streamlit
 - Add real-time image upload prediction
 
----
-
-## Author
-
-**Hasini**  
-Machine Learning Internship Project
-
----
-
-## License
-
-This project is for educational and internship learning purposes.
+--

@@ -1,16 +1,3 @@
-"""
-SVM Cat vs Dog Classifier
-==========================
-Folder structure expected:
-    Animal/
-    ├── training_set/
-    │   ├── cats/
-    │   └── dogs/
-    └── test_set/
-        ├── cats/
-        └── dogs/
-"""
-
 import os
 import numpy as np
 import cv2
@@ -26,9 +13,6 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
-# ─────────────────────────────────────────────
-# CONFIGURATION — edit BASE_DIR if needed
-# ─────────────────────────────────────────────
 BASE_DIR   = os.path.dirname(os.path.abspath(__file__))  # Animal/ folder
 TRAIN_DIR  = os.path.join(BASE_DIR, "training_set")
 TEST_DIR   = os.path.join(BASE_DIR, "test_set")
@@ -41,9 +25,7 @@ HOG_CELLS_PER_BLOCK  = (2, 2)
 MAX_SAMPLES_PER_CLASS = 2000   # increase for better accuracy (slower)
 RANDOM_STATE         = 42
 
-# ─────────────────────────────────────────────
 # 1. LOAD IMAGES
-# ─────────────────────────────────────────────
 def load_images_from_folder(folder: str, label: int, max_samples: int):
     """Load images from a single class folder."""
     X, y = [], []
@@ -65,7 +47,6 @@ def load_images_from_folder(folder: str, label: int, max_samples: int):
 
 
 def load_dataset(root_dir: str):
-    """Load cats (label=0) and dogs (label=1) from training_set or test_set."""
     cats_dir = os.path.join(root_dir, "cats")
     dogs_dir = os.path.join(root_dir, "dogs")
 
@@ -82,10 +63,7 @@ def load_dataset(root_dir: str):
     print(f"[INFO] Loaded {len(Xc)} cats + {len(Xd)} dogs = {len(X)} total")
     return X, y
 
-
-# ─────────────────────────────────────────────
 # 2. HOG FEATURE EXTRACTION
-# ─────────────────────────────────────────────
 def extract_hog_features(images: np.ndarray) -> np.ndarray:
     features = []
     for img in tqdm(images, desc="Extracting HOG features"):
@@ -102,9 +80,7 @@ def extract_hog_features(images: np.ndarray) -> np.ndarray:
     return np.array(features)
 
 
-# ─────────────────────────────────────────────
 # 3. VISUALIZE HOG
-# ─────────────────────────────────────────────
 def visualize_hog(images: np.ndarray, labels: np.ndarray, n: int = 4):
     label_names = {0: 'Cat', 1: 'Dog'}
     fig, axes = plt.subplots(n, 2, figsize=(7, n * 3))
@@ -135,9 +111,7 @@ def visualize_hog(images: np.ndarray, labels: np.ndarray, n: int = 4):
     print(f"[INFO] HOG visualization saved → {save_path}")
 
 
-# ─────────────────────────────────────────────
 # 4. TRAIN SVM
-# ─────────────────────────────────────────────
 def train_svm(X_train: np.ndarray, y_train: np.ndarray):
     print("\n[INFO] Training SVM pipeline (StandardScaler + RBF SVC)...")
 
@@ -159,9 +133,7 @@ def train_svm(X_train: np.ndarray, y_train: np.ndarray):
     return pipeline
 
 
-# ─────────────────────────────────────────────
 # 5. EVALUATE
-# ─────────────────────────────────────────────
 def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray):
     y_pred = model.predict(X_test)
     acc    = accuracy_score(y_test, y_pred)
@@ -224,10 +196,7 @@ def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray):
 
     return acc
 
-
-# ─────────────────────────────────────────────
-# 6. PREDICT A SINGLE IMAGE
-# ─────────────────────────────────────────────
+# 6. PREDICT A SINGLE IMAGe
 def predict_image(model, img_path: str):
     img = cv2.imread(img_path)
     if img is None:
@@ -253,22 +222,19 @@ def predict_image(model, img_path: str):
     plt.tight_layout()
     plt.show()
 
-
-# ─────────────────────────────────────────────
 # MAIN
-# ─────────────────────────────────────────────
 def main():
     print("=" * 50)
     print("   SVM Cat vs Dog Classifier")
     print("=" * 50)
 
-    # ── Load training data ──────────────────────
+    # ── Load training data
     X_train_raw, y_train = load_dataset(TRAIN_DIR)
 
-    # ── Load test data ──────────────────────────
+    # ── Load test data
     X_test_raw, y_test = load_dataset(TEST_DIR)
 
-    # ── Extract HOG features ────────────────────
+    # ── Extract HOG features
     print("\n[INFO] Extracting HOG features — training set...")
     X_train = extract_hog_features(X_train_raw)
 
@@ -280,10 +246,10 @@ def main():
     # ── Visualize HOG on a few samples ──────────
     visualize_hog(X_train_raw[:4], y_train[:4])
 
-    # ── Train SVM ───────────────────────────────
+    # ── Train SVM 
     model = train_svm(X_train, y_train)
 
-    # ── Evaluate on test set ────────────────────
+    # ── Evaluate on test set 
     evaluate_model(model, X_test, y_test)
 
     # ── Save model 

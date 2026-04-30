@@ -147,9 +147,7 @@ python animal.py
 ## Sample Output
 
 ```text
-==================================================
    SVM Cat vs Dog Classifier
-==================================================
 
 [INFO] Loaded 4000 training images
 [INFO] Loaded 2023 testing images
